@@ -42,18 +42,11 @@ class ClubController extends AbstractController
         $value = $request->query->get('value');
         return $this->render('club/details.html.twig',['value' => $value]);;
     }
-    #[Route('/clubs', name: 'app_club')]
+    #[Route('/clubs', name: 'app_club1')]
     public function listClub(ClubRepository $repository)
     {
         $clubs= $repository->findAll();
         return $this->render("club/listClub.html.twig",
             array("tabClub"=>$clubs));
-    }
-    #[Route('/student', name: 'app_student')]
-    public function listStudet(StudentRepository $repository)
-    {
-        $student= $repository->findAll();
-        return $this->render("club/listStudent.html.twig",
-            array("tabStudent"=>$student));
     }
 }
