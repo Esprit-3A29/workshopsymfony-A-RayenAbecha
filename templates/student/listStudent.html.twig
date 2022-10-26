@@ -1,3 +1,4 @@
+{{ form(searchForm) }}
 <a href="{{ path('app_addstudent') }}">+Add</a>
 <br>
 {% for c in tabStudent %}
@@ -6,5 +7,12 @@
     moyenne: {{ c.moyenne }}
     <a href="#">Delete</a>
     <a href="#">Update</a>
+   <br>
+{% endfor %}
+<h1> new List </h1>
+{% for i in sortByMoyenne %}
+    id : {{ i.nce }}
+    username:{{ i.username }}
+    moyenne: {{ i.moyenne }}
    <br>
 {% endfor %}

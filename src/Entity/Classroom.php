@@ -24,6 +24,7 @@ class Classroom
 
     #[ORM\OneToMany(mappedBy: 'classroom', targetEntity: Student::class)]
     private Collection $students;
+    
 
     public function __construct()
     {

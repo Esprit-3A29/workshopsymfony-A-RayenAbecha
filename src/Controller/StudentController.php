@@ -3,6 +3,7 @@
 namespace App\Controller;
 use App\Entity\Student;
 use App\Form\StudentType;
+use App\Form\SearchStudentType;
 use App\Repository\StudentRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -12,14 +13,27 @@ use Symfony\Component\Routing\Annotation\Route;
 class StudentController extends AbstractController
 {
 #[Route('/student', name: 'app_student')]
-public function listStudet (StudentRepository $repository)
+public function listStudet (Request $request,StudentRepository $repository)
 {
     $student= $repository->findAll();
-    return $this->render("student/listStudent.html.twig",
-        array("tabStudent"=>$student));
-}
+    $sortByMoyenne=$repository->sortByMoyenne();
+    $formSearch= $this->createForm(SearchStudentType::class);
+    $formSearch->handleRequest($request);
+    if($formSearch->isSubmitted()){
+        $nce= $formSearch->get('nce')->getData();
+        //var_dump($nce).die();
+        $result= $repository->searchStudent($nce);
+        return $this->renderForm("student/listStudent.html.twig",
+            array("tabStudent"=>$result,
+                "sortByMoyenne"=>$sortByMoyenne,
+                "searchForm"=>$formSearch));
+    }
+    return $this->renderForm("student/listStudent.html.twig", array("tabStudent"=>$student,
+        "sortByMoyenne"=>$sortByMoyenne,
+         "searchForm"=>$formSearch ));
+        }
 #[Route('/addStudent', name: 'app_addstudent')]
-public function addStudent(StudentRepository $repository ,Request $request,ManagerRegistry $doctrine)
+ public function addStudent(StudentRepository $repository ,Request $request,ManagerRegistry $doctrine)
 {
     $student= new Student();
     $form= $this->createForm(StudentType::class,$student);
